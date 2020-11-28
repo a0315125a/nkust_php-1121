@@ -1,18 +1,5 @@
 <?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "12345678";
-	$dbname = "nkustdb";
-	// Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-	// Check connection
-	if ($conn->connect_error) {
-	  die("Connection failed: " . $conn->connect_error);
-	}
-	//echo "Connected successfully";	
-
-
+require("dbinfo.php");	
 ?>
 
 <!doctype html>
@@ -21,10 +8,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
     <title>方泊洧</title>
     <style>
     	body { font-family: 標楷體;}
@@ -47,19 +32,26 @@
 	</ul>
 	<hr>
 
+	<form action="insert.php" method="post">
+	訊息內容: <input type="text" name="name" size=40>
+	<input type="submit" value="送出">
+	</form>
+
 	<?php
 		$sql = "SELECT * FROM news";
 		$result = $conn->query($sql);
-
 		if ($result->num_rows > 0) {
 		  // output data of each row
 		  echo "<table class='table table-striped'>";
-		  echo "<tr><th>編號</th><th>馬路消息</th><th>張貼日期</th></tr>";
+		  echo "<tr><th>編號</th><th>馬路消息</th><th>張貼日期</th><th>管理</th></tr>";
 		  while($row = $result->fetch_assoc()) {
 		  	echo "<tr>";
 		    echo "<td>". $row["id"]."</td>".
 		         "<td>". $row["title"]."</td>".
-		         "<td>". $row["pub_date"]."</td>";
+				 "<td>". $row["pub_date"]."</td>".
+				 "<td><a href='delete.php?id=".
+				 $row["id"]."'>刪除</a></td>";
+				 
 		    echo "</tr>";
 		  }
 		  echo "</table>";
